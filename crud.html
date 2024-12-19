@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<style>
+    .modals{
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba(1, 1, 1, 0.293);
+        position: absolute;
+        top: 0;
+        display: none;
+    }
+    form{
+        width: 400px;
+        margin: auto;
+        margin-top: 40px;
+        padding: 20px 25px;
+        background-color: #fff;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        border-radius: 10px;
+        animation-name: drop;
+        animation-duration: 1s;
+        animation-fill-mode: forwards;
+    }
+    @keyframes drop{
+        0%{
+            transform: translateY(0);
+        }
+        100%{
+            transform: translateY(20px);
+        }
+    }
+</style>
+<body>
+    <div class="container-fluid p-3">
+        <h1>Student`s Information</h1>
+        <button class="btn btn-primary float-end" id="addStudent">Add Student</button>
+        <table class="mt-5 table table-hover align-middle text-center" style="table-layout: fixed;">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Sex</th>
+                    <th>Score1</th>
+                    <th>Score2</th>
+                    <th>Score3</th>
+                    <th>Average</th>
+                    <th>Grade</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbody">
+                
+            </tbody>
+        </table>
+    </div>
+    <div class="modals">
+        <form action="">
+            <h2 class="text-center" id="title"></h2>
+            <div class="form-group">
+                <label for="id" class="form-label">ID</label>
+                <input type="text" name="" id="id" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" name="" id="name" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="sex" class="form-label">Sex</label>
+                <select name="" id="sex" class="form-control">
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="score1" class="form-label">Score1</label>
+                <input type="text" name="" id="score1" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="score2" class="form-label">Score2</label>
+                <input type="text" name="" id="score2" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="score3" class="form-label">Score3</label>
+                <input type="text" name="" id="score3" class="form-control">
+            </div>
+            <div class="form-group d-flex justify-content-end">
+                <button type="button" class="btn btn-primary mt-4 me-2" id="btnSave">Save</button>
+                <button type="button" class="btn btn-success mt-4 me-2" id="btnEdit">Edit</button>
+                <button type="button" class="btn btn-danger mt-4 me-2" id="cancel">Cancel</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+<script>
+    $(document).ready(function(){
+        function clearValue(){
+            $('#id').val('');
+            $('#name').val('');
+            if($('#sex').val()!='Male'){
+                $('#sex').val('Male');
+            }
+            $('#score1').val('');
+            $('#score2').val('');
+            $('#score3').val('');
+        }
+        $('#addStudent').click(function(){
+           clearValue()
+            $('.modals').fadeIn();
+            $('#title').html('Add Student');
+            $('#btnEdit').hide();
+            $('#btnSave').show()
+        })
+        $('#cancel').click(function(){
+            $('.modals').fadeOut();
+        })
+        $('#btnSave').click(function(){
+            $('.modals').fadeOut();
+            const id=$('#id').val();
+            const name=$('#name').val();
+            const sex=$('#sex').val();
+            const score1=Number($('#score1').val())
+            const score2=Number($('#score2').val())
+            const score3=Number($('#score3').val())
+            var total=score1+score2+score3;
+            var average=total/3;
+            var grade='';
+            grade=(average>=90) ? 'A':
+                  (average>=80) ? 'B':   
+                  (average>=70) ? 'C':   
+                  (average>=60) ? 'D':   
+                  (average>=50) ? 'E':  'F';
+            // if(average>=90){
+            //     grade='A';
+            // }else if(average>=80){
+            //     grade='B';
+            // }else if(average>=70){
+            //     grade='C';
+            // }else if(average>=60){
+            //     grade='D';
+            // }else if(average>=50){
+            //     grade='E';
+            // }else{
+            //     grade='F';
+            // }
+            $('#tbody').append(`
+                <tr>
+                    <td>${id}</td>
+                    <td>${name}</td>
+                    <td>${sex}</td>
+                    <td>${score1}</td>
+                    <td>${score2}</td>
+                    <td>${score3}</td>
+                    <td>${average}</td>
+                    <td>${grade}</td>
+                    <td>
+                        <button type="button" class="btn btn-warning me-2" id="edit">Edit</button>
+                        <button type="button" class="btn btn-danger" id="delete">Delete</button>
+                    </td>
+                </tr>
+            `);    
+            
+        })
+        $(document).on('click','#delete',function(){
+            const tr=$(this).parents('tr');
+            tr.remove()
+        })
+        $(document).on('click','#edit',function(){
+            clearValue()
+            $('.modals').fadeIn();
+            $('#title').html('Edit Student');
+            $('#btnEdit').show();
+            $('#btnSave').hide();
+            const tr=$(this).parents('tr');
+            const tid=tr.find('td:nth-child(1)').text();
+            const tname=tr.find('td:nth-child(2)').text();
+            const tsex=tr.find('td:nth-child(3)').text();
+            const tscore1=tr.find('td:nth-child(4)').text();
+            const tscore2=tr.find('td:nth-child(5)').text();
+            const tscore3=tr.find('td:nth-child(6)').text();
+            
+            $('#id').val(tid);
+            $('#name').val(tname);
+            $('#sex').val(tsex);
+            $('#score1').val(tscore1)
+            $('#score2').val(tscore2)
+            $('#score3').val(tscore3)
+
+            $('#btnEdit').click(function(){
+                tr.find('td:nth-child(1)').text($('#id').val())
+                tr.find('td:nth-child(2)').text($('#name').val())
+                tr.find('td:nth-child(3)').text('2')
+                tr.find('td:nth-child(4)').text('2')
+                tr.find('td:nth-child(5)').text('2')
+                tr.find('td:nth-child(6)').text('2')
+            })
+        })
+        
+    })
+</script>
